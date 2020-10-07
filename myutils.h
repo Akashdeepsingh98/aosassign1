@@ -322,20 +322,24 @@ void gotof()
 {
     if (commandVector.size() != 2)
     {
+        givemsg();
         printf("Give correct arguments");
+        setCurToCmd();
         return;
     }
     string destpath = getAbsPath(commandVector[1]);
     if (!isDirectory(destpath))
     {
+        givemsg();
         printf("Give directory");
+        setCurToCmd();
         return;
     }
-    backdirstack.push(curDir);
     curDir = destpath;
     windowpos = 0;
     fillDirList(curDir);
     printDirList();
+    backdirstack.push(curDir);
     crow = terminal.ws_row - 1;
     ccol = 1;
     moveCursor();
