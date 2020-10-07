@@ -1,3 +1,4 @@
+
 #include "myutils.h"
 using namespace std;
 
@@ -8,6 +9,8 @@ int main()
     root = tmp;
     root = getAbsPath(root);
     curDir = root;
+    cout << curDir << endl;
+    getchar();
     backdirstack.push(curDir);
     printf("\033[?1049h");
     fillDirList(curDir);

@@ -193,7 +193,7 @@ void deleteFiles()
         setCurToCmd();
         return;
     }
-    for (int i = 1; i < commandVector.size() ; i++)
+    for (int i = 1; i < commandVector.size(); i++)
     {
         string filepath = getAbsPath(commandVector[i]);
         if (isFile(filepath))
@@ -303,6 +303,9 @@ void executeCommand()
     else if (command == "search")
     {
         search();
+        getchar();
+        givemsg();
+        setCurToCmd();
     }
     else if (command == "goto")
     {
@@ -424,7 +427,6 @@ void fillDirList(string path)
 
 void copyDirectory(string from, string to)
 {
-    // to be done
     string srcdirpath = getAbsPath(from);
     string destdirpath = getAbsPath(to);
     if (!isDirectory(srcdirpath))
@@ -523,7 +525,7 @@ void comStrToComVec()
 bool isFile(string path)
 {
     string abspath = getAbsPath(path);
-    ofstream f;
+    ifstream f;
     f.open(abspath);
     if (!f)
         return false;
@@ -677,7 +679,9 @@ bool isDirectory(string path)
     struct stat statbuffer;
     if (stat(path.c_str(), &statbuffer) != 0)
     {
-        perror("");
+        givemsg();
+        printf("Cannot check if directory");
+        setCurToCmd();
         return false;
     }
     if (S_ISDIR(statbuffer.st_mode))
@@ -1138,36 +1142,32 @@ void pressL()
 
 void searchDir(string path, string filename, bool &found)
 {
-    //string abspath = getAbsPath(path);
     DIR *dirptr;
     dirptr = opendir(path.c_str());
     if (!dirptr)
     {
+        givemsg();
+        printf("cannot open directory");
+        setCurToCmd();
+        getchar();
         return;
     }
     struct dirent *direntry;
     while (direntry = readdir(dirptr))
     {
-        string fn = path + direntry->d_name;
-        if (string(direntry->d_name) == "." || string(direntry->d_name) == "..")
+        string fn = path + "/" + string(direntry->d_name);
+        if (string(direntry->d_name)[0] == '.' || string(direntry->d_name) == "..")
         {
             continue;
         }
-        if (isFile(fn))
+        if(string(direntry->d_name) == filename)
         {
-            if (string(direntry->d_name) == filename)
-            {
-                found = true;
-                return;
-            }
+            found=true;
+            closedir(dirptr);
+            return;
         }
-        else if (isDirectory(fn))
+        if(isDirectory(fn))
         {
-            if (string(direntry->d_name) == filename)
-            {
-                found = true;
-                return;
-            }
             searchDir(fn, filename, found);
         }
     }
@@ -1178,11 +1178,13 @@ void search()
 {
     if (commandVector.size() != 2)
     {
+        givemsg();
+        printf("Search arguments incorrect");
+        setCurToCmd();
         return;
     }
     bool found = false;
     searchDir(curDir, commandVector.back(), found);
-    cout << found << endl;
     getchar();
     if (found)
     {
@@ -1210,7 +1212,6 @@ void search()
         printf("cmd>");
         ccol += 4;
     }
-    curDir = backdirstack.top();
 }
 
 void renamef()
