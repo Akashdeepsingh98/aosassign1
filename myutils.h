@@ -154,8 +154,11 @@ void printDirList()
     }
     for (int i = top; i < bottom + 1; i++)
     {
+        crow = i - top + 1;
         printDirInLine(dirlist[i]);
     }
+    givemsg();
+    setCurToCmd();
 }
 
 void copyFile(string from, string to)
@@ -1092,6 +1095,14 @@ void enNormMode()
         else if (ch[0] == 'h' || ch[0] == 'H')
         {
             pressHomeKey();
+        }
+        else if (ch[0] == 'l' || ch[0] == 'L')
+        {
+            pressL();
+        }
+        else if (ch[0] == 'k' || ch[0] == 'K')
+        {
+            pressK();
         }
         else if (ch[0] == 127)
         {
