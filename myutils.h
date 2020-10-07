@@ -969,7 +969,6 @@ void pressEnterKey()
 {
     if (dirlist[crow + windowpos - 1] == ".")
     {
-        getchar();
         fillDirList(curDir);
         printDirList();
         crow = terminal.ws_row - 1;
@@ -1149,7 +1148,6 @@ void searchDir(string path, string filename, bool &found)
         givemsg();
         printf("cannot open directory");
         setCurToCmd();
-        getchar();
         return;
     }
     struct dirent *direntry;
@@ -1160,13 +1158,13 @@ void searchDir(string path, string filename, bool &found)
         {
             continue;
         }
-        if(string(direntry->d_name) == filename)
+        if (string(direntry->d_name) == filename)
         {
-            found=true;
+            found = true;
             closedir(dirptr);
             return;
         }
-        if(isDirectory(fn))
+        if (isDirectory(fn))
         {
             searchDir(fn, filename, found);
         }
@@ -1185,7 +1183,6 @@ void search()
     }
     bool found = false;
     searchDir(curDir, commandVector.back(), found);
-    getchar();
     if (found)
     {
         crow = terminal.ws_row;
