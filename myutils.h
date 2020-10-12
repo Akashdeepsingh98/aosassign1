@@ -1,3 +1,7 @@
+#ifndef MYUTILS_H
+#define MYUTILS_H
+#endif
+
 #include <iostream>
 #include <termios.h>
 #include <sys/ioctl.h>
