@@ -19,6 +19,7 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <dirent.h>
+#include "keypress.h"
 using namespace std;
 
 int crow = 0, ccol = 0;
@@ -491,21 +492,6 @@ void copyDirectory(string from, string to)
         }
     }
     closedir(dd);
-}
-
-void pressDownKey()
-{
-    if (crow <= numTermRows && crow < dirlist.size())
-    {
-        crow++;
-        moveCursor();
-    }
-    else if (crow > numTermRows && crow + windowpos < dirlist.size())
-    {
-        windowpos++;
-        printDirList();
-        //moveCursor();
-    }
 }
 
 void comStrToComVec()
